@@ -1,0 +1,78 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+/**
+ * 
+ */
+
+/**
+ * @author 
+ *
+ */
+public class Main {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		ArrayList<Integer> nodelist = new ArrayList<Integer>();
+		int [][] fingerlist = new int[10][6];
+		int N;
+		int B;
+		
+		System.out.print("Please enter a number of possible Node ID spaces (between 5 and 10 inclusive): ");
+		N = scan.nextInt();
+		while (N > 10 | N < 5){
+			System.out.print("Invalid entry, please enter a number of possible Node ID spaces (between 5 and 10 inclusive): ");
+			N = scan.nextInt();
+		}
+		
+		System.out.print("Please enter a number of nodes in Chord. (between 5 and 15 inclusive): ");
+		B = scan.nextInt();
+		while (B > 15 | B < 5){
+			System.out.print("Invalid entry, please enter a number of possible Node ID spaces (between 5 and 15 inclusive): ");
+			B = scan.nextInt();
+		}
+
+		
+		Random r = new Random();
+		for(int i = 0; i < N; i++){
+		int temp = r.nextInt((int) Math.pow(2, B)+1 - 1) + 1;
+		nodelist.add(temp);
+		System.out.println(temp);
+		}
+		
+		int K = r.nextInt((int) Math.pow(2, B)+1 - 1) + 1;
+		int nodeSindex = r.nextInt(N);
+		int nodeS = nodelist.get(nodeSindex);
+		int on = 0;
+		Collections.sort(nodelist);
+		
+		int count = 0;
+		for(int i = 0; i < N; i++){
+			for(int z = 1; z <= 64; z = z*2){
+				for(int x = 0; x < N; x++){
+					if (x < N-1){
+						if ((nodelist.get(i) + z) > nodelist.get(x)){
+							fingerlist[i][count] = nodelist.get(x+1);
+							on = 1;
+						}
+					}
+
+				}
+				if (on == 0){
+					fingerlist[i][count] = nodelist.get(i);
+				}
+				on = 0;
+				count += 1;
+				count = 0;
+			}
+			
+		}
+		for(int i = 0; i < N; i++){
+			System.out.println(fingerlist[i][0]+" "+fingerlist[i][1]+" "+fingerlist[i][2]+" "+fingerlist[i][3]+" "+fingerlist[i][4]+" "+fingerlist[i][5]);
+		}
+	}
+}
